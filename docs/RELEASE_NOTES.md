@@ -1,4 +1,4 @@
-# First public-source release — draft
+# First public-source release — published
 
 ## Provenance
 
@@ -18,4 +18,4 @@
 - This is not a public hosted demo or one-click Google Sheet installation.
 - No automated Google Tasks/Calendar execution was performed during preparation.
 - Copyright holder: **Spencer Armand**. MIT license included.
-- This repository remains private staging until Spencer Armand explicitly approves publication.
+- GitHub repository visibility is **public**, following Spencer Armand's approval. This source distribution is separate from the private, actively used Apps Script/Sheets application.

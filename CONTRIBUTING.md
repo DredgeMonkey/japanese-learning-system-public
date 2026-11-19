@@ -1,6 +1,6 @@
 # Contributing
 
-Contributions are welcome after this repository is published. Please keep changes incremental, preserve inline architectural annotations, and explain the affected Google Workspace API constraints. Do not casually replace the established synchronization/cleanup mechanisms without isolated regression tests.
+Contributions are welcome in this published source repository. Please keep changes incremental, preserve inline architectural annotations, and explain the affected Google Workspace API constraints. Do not casually replace the established synchronization/cleanup mechanisms without isolated regression tests.
 
 For issues, provide a reproduction using a **test** Google Sheet, Calendar and Tasks list; never post your live account identifiers, tokens or private study records. Changes affecting destructive operations should include safeguards and an explicit demonstration that normal user data remains untouched. Changes to date/streak logic should consider time zones and daylight-saving transitions.
 
