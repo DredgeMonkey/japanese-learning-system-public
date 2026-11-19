@@ -17,4 +17,5 @@
 
 - This is not a public hosted demo or one-click Google Sheet installation.
 - No automated Google Tasks/Calendar execution was performed during preparation.
-- This draft requires final copyright/license and sharing approval before publication.
+- Copyright holder: **Spencer Armand**. MIT license included.
+- This repository remains private staging until Spencer Armand explicitly approves publication.

@@ -50,8 +50,8 @@ No live account identifiers, credentials, spreadsheet contents, or OAuth configu
 
 ## Project history and credit
 
-Original project attribution in the private development README: **Kiri-Hayato (霧隼) and Shizu (静)**. This release preserves the modular structure and annotated engineering decisions from that implementation. Many workarounds are deliberate accommodations to Google Apps Script/Workspace API constraints, not invitations to remove functioning behavior without testing.
+**Created and developed by Spencer Armand.** This release preserves the original modular structure, detailed source annotations, and engineering decisions of the working Japanese Learning System. Many workarounds are deliberate accommodations to Google Apps Script/Workspace API constraints, not invitations to remove functioning behavior without testing.
 
 ## License
 
-MIT; see [LICENSE](LICENSE). Copyright attribution should be confirmed by the rights holders before this draft is published.
+MIT; see [LICENSE](LICENSE). Copyright (c) 2025–2026 Spencer Armand.
