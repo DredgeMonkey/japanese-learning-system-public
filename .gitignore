@@ -1,0 +1,18 @@
+# CLASP connection and local OAuth files — never publish.
+.clasp.json
+.clasprc.json
+**/.clasprc.json
+.env
+.env.*
+!.env.example
+**/node_modules/
+*.log
+*.zip
+*.bak
+*.backup
+.DS_Store
+# Development snapshots and private learning data
+*live-snapshot*
+*production-export*
+*private-data*
+*credentials*
