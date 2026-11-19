@@ -1,0 +1,181 @@
+<!--
+📘 KanjiLogger.html — Quick Kanji/Vocab/Grammar Logger Interface
+
+🧩 Purpose:
+This HTML sidebar provides a simple and fast way to log individual language items 
+(Kanji, Vocabulary, Grammar, or Immersion entries) directly into the active phase's 
+Learning Log sheet via Apps Script.
+
+⚙️ Features:
+- Allows selection of entry type, input of content and tags, and manual date entry
+- Addresses Google Sheets UTC issue with a clear timezone warning
+- Submits structured entries to the backend `logFullStudyEntry()` function
+
+🛡️ Benefits:
+- Bypasses manual spreadsheet entry
+- Prevents timestamp errors via manual date selection
+- Encourages micro-logging of language exposure and learning details
+
+💡 Note:
+Includes a UTC warning for users in timezones behind UTC and links to the healing process.
+-->
+
+
+<!-- KanjiLogger.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      /* 🎨 → Unified UI styling from SeasonLogger */
+      body {
+        font-family: 'Segoe UI', sans-serif;
+        padding: 20px;
+      }
+
+      label {
+        display: block;
+        margin-top: 10px;
+        font-weight: bold;
+      }
+
+      input[type="text"],
+      input[type="date"],
+      select {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        box-sizing: border-box;
+      }
+
+      button {
+        margin-top: 15px;
+        background-color: #673ab7;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+      }
+
+      .status {
+        margin-top: 15px;
+        font-size: 0.9em;
+        font-weight: bold;
+        color: #333;
+      }
+
+      #timezoneNotice {
+        margin-top: 16px;
+        font-size: 0.9em;
+        line-height: 1.35;
+        color: #333;
+        background: #f9f9f9;
+        padding: 10px 12px;
+        border-radius: 6px;
+        border-left: 4px solid #ffc107;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 🎬 → Header Title -->
+    <h2>🈷️ Kanji & Vocab Logger</h2>
+    
+    <!-- 🧠 Entry Type Selection -->
+    <label for="entryType">Entry Type:</label>
+    <select id="entryType">
+      <option value="Kanji">漢字 (Kanji)</option>
+      <option value="Vocabulary">Vocabulary</option>
+      <option value="Grammar">Grammar</option>
+      <option value="Immersion">Immersion</option>
+    </select>
+
+    <!-- 📝 Content Entry -->
+    <label for="entryContent">Content:</label>
+    <input type="text" id="entryContent" placeholder="e.g. 学 (study), passive form, etc." />
+
+    <!-- 🏷️ Tag Input -->
+    <label for="entryTags">Tags (optional):</label>
+    <input type="text" id="entryTags" placeholder="e.g. JLPT N4, Theme: School" />
+
+    <!-- 📅 Manual Date Picker -->
+    <label for="entryDate">Date:</label>
+    <input type="date" id="entryDate" />
+
+    <!-- 🚀 Submit Button -->
+    <button onclick="submitEntry()">Log Entry</button>
+    <div class="status" id="status"></div>
+
+    <!-- ⏰ Timezone Warning -->
+    <div id="timezoneNotice">
+      <!-- Content preserved as is (excellent UX explanation) -->
+      <strong>⚠️ Timezone Notice:</strong> Google Apps Script saves dates in UTC.<br><br>
+      If you're in a timezone <strong>behind UTC</strong> (e.g., US timezones), selecting today’s date may log it as the <em>previous day</em>.<br><br>
+      <strong>➡️ To ensure accuracy:</strong><br>
+      – Pick the date <strong>one day ahead</strong> (e.g., choose April 30 to log April 29).<br>
+      – Then run <strong>🩺 Heal Session Anchors</strong> from the menu.<br><br>
+      ✅ Your dashboard will reflect the correct date automatically.
+    </div>
+
+    <script>
+      /**
+      * 📤 submitEntry()
+      * Collects input values from the form, validates fields,
+      * and sends the structured entry object to the backend Apps Script function `logFullStudyEntry()`.
+      * Provides real-time status feedback to the user.
+      */
+      function submitEntry() {
+        const entryType = document.getElementById("entryType").value;
+        const entryContent = document.getElementById("entryContent").value.trim();
+        const entryTags = document.getElementById("entryTags").value.trim();
+        const entryDate = document.getElementById("entryDate").value;
+
+        const status = document.getElementById("status");
+
+        // 🧪 Basic validation
+        if (!entryContent) {
+          status.innerText = "⚠️ Please enter some content.";
+          status.style.color = "orange";
+          return;
+        }
+
+        if (!entryDate) {
+          status.innerText = "⚠️ Please select a date.";
+          status.style.color = "orange";
+          return;
+        }
+
+        // 🗃️ Build entry object to match expected structure in backend
+        const entry = {
+          resource: entryContent,
+          focus: entryTags,
+          day: "",
+          date: entryDate,
+          time: "",
+          completed: false,
+          difficulty: "",
+          notes: "",
+          type: entryType
+        };
+
+        // 🚀 Submit to backend and handle response
+        google.script.run
+          .withSuccessHandler(() => {
+            status.innerText = "✅ Logged successfully!";
+            status.style.color = "green";
+
+            // ♻️ Clear form inputs
+            document.getElementById("entryContent").value = "";
+            document.getElementById("entryTags").value = "";
+            document.getElementById("entryDate").value = "";
+          })
+          .withFailureHandler((err) => {
+            status.innerText = "❌ Error: " + err.message;
+            status.style.color = "red";
+          })
+          .logFullStudyEntry(entry);
+      }
+    </script>
+  </body>
+</html>
+
