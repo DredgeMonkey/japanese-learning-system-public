@@ -1,0 +1,82 @@
+<!-- 
+  🎨 ThemeSidebar.html
+  ─────────────────────────────────────────────
+  This sidebar allows users to toggle between "Light" and "Dark" themes for the system UI.
+
+  It updates the Dashboard cell containing the active theme (B30), which is referenced
+  by all styling functions throughout the app (UIExtended.gs).
+
+  📦 Key Behavior:
+  - Dropdown selector (Light or Dark)
+  - Applies selection via `setTheme()` Apps Script function
+  - Closes the sidebar upon successful theme change
+
+  🛠️ Style Guide:
+  - Clean layout with Arial font
+  - Full-width select and button elements
+  - Consistent styling with other UI sidebars
+-->
+
+<!-- ThemeSidebar.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      /* 🎨 → Sidebar theme selection styling (SeasonLogger variant) */
+      body {
+        font-family: 'Segoe UI', sans-serif;
+        padding: 16px;
+      }
+
+      select {
+        font-size: 16px;
+        padding: 8px;
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 10px;
+      }
+
+      button {
+        margin-top: 15px;
+        background-color: #673ab7;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <!-- 📝 Theme header text -->
+    <h3>Choose Theme</h3>
+
+    <!-- 📝 Theme selector dropdown -->
+    <select id="themeSelect">
+      <option>Light</option>
+      <option>Dark</option>
+    </select>
+
+    <!-- 📝 Apply button -->
+    <br>
+    <button onclick="applyTheme()">Apply Theme</button>
+
+    <script>
+      /**
+       * 🎯 applyTheme()
+       * Gets selected theme from dropdown and passes it to Apps Script backend.
+       * Closes the sidebar if the operation succeeds.
+       */
+      function applyTheme() {
+        const theme = document.getElementById("themeSelect").value;
+        google.script.run
+          .withSuccessHandler(() => google.script.host.close()) // ✅ Close sidebar on success
+          .setTheme(theme); // 🎨 Update active theme in Dashboard
+      }
+    </script>
+  </body>
+</html>
+

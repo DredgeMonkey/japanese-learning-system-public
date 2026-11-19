@@ -1,0 +1,100 @@
+<!--
+📄 SmartPromptSidebar.html
+─────────────────────────────────────────────
+💡 Sidebar interface for generating mood-based SmartPrompts
+in the Japanese Learning Tracker system.
+
+This UI allows users to select their current mood and generate
+a contextual study suggestion via a call to `getTodaySmartPrompt()`.
+
+🎛️ Components:
+- Mood Selector (dropdown)
+- Trigger Button (fetches a prompt)
+- Output Box (displays returned SmartPrompt)
+
+🔗 Connected Function:
+- getTodaySmartPrompt(mood) in Code.gs
+
+🎯 Purpose:
+- Offer randomized motivational or themed study prompts based on user mood
+-->
+
+<!-- SmartPrompt Sidebar.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      /* 🎨 → Unified UI styling from SeasonLogger */
+      body {
+        font-family: 'Segoe UI', sans-serif;
+        padding: 20px;
+      }
+
+      label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      select, button {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+      }
+
+      button {
+        background-color: #673ab7;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+
+      #output {
+        padding: 12px;
+        background: #f0f0f0;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        line-height: 1.4;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 📝 Sidebar Header -->
+    <h2>💡 Get Inspired (SmartPrompt)</h2>
+
+    <!-- 🎛️ Mood Selector -->
+    <label for="mood">Select your mood:</label>
+    <select id="mood">
+      <option value="Any">Any</option>
+      <option value="Low">Low</option>
+      <option value="Normal">Normal</option>
+      <option value="High">High</option>
+    </select>
+
+    <!-- 🎲 Prompt Trigger Button -->
+    <button onclick="fetchPrompt()">🎲 Get SmartPrompt</button>
+
+    <!-- 📤 Prompt Output Display -->
+    <div id="output">Your prompt will appear here...</div>
+
+    <script>
+       /**
+       * 🚀 Trigger SmartPrompt generation based on selected mood
+       */
+      function fetchPrompt() {
+        const mood = document.getElementById("mood").value;
+
+        // ⏳ Indicate loading state
+        document.getElementById("output").innerText = "Fetching...";
+
+        // 📡 Call server-side Apps Script to get prompt
+        google.script.run.withSuccessHandler(function(prompt) {
+          document.getElementById("output").innerText = prompt;
+        }).getTodaySmartPrompt(mood);
+      }
+    </script>
+  </body>
+</html>
+

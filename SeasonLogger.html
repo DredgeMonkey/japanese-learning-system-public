@@ -1,0 +1,186 @@
+<!--
+🎬 SeasonLogger.html — Log Full Seasons of Media Study (Anime, TV, Drama, etc.)
+
+🧩 Purpose:
+This HTML sidebar allows users to log completed seasons of serialized content 
+directly into the Learning Log sheet via structured entry. It is optimized for 
+recording time-spent on media immersion without affecting session metrics.
+
+⚙️ Features:
+- Dropdown for selecting media type (Anime, Drama, TV Show, etc.)
+- Inputs for title, completion date, total minutes studied, and optional notes
+- Auto-tags the entry as `Media: [Type]` in the backend
+- Calls `logFullStudyEntry()` via Apps Script on submission
+
+📊 Data Impact:
+- Adds to Total Study Hours
+- Excluded from: Session Count, Avg Session Time, Difficulty, Completion %
+
+💡 Note:
+Season entries are considered immersion study logs and do not contribute to structured session analytics.
+-->
+
+<!-- SeasonLogger.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    /* 🎨 → Unified UI styling for Season Logger */
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      padding: 20px;
+      background-color: #ffffff;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 14px;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    button {
+      margin-top: 15px;
+      background-color: #673ab7;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      font-size: 14px;
+    }
+
+    .status {
+      margin-top: 15px;
+      font-size: 0.9em;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .note {
+      margin-top: 16px;
+      background: #f9f9f9;
+      border-left: 4px solid #673ab7;
+      padding: 12px;
+      font-size: 0.9em;
+      line-height: 1.45;
+    }
+  </style>
+
+</head>
+<body>
+  <!-- 🎬 → Header Title -->
+  <h2>🎬 Log Season Entry</h2>
+
+  <!-- 🎚️ → Dropdown: Media Type -->
+  <label for="seasonType">Media Type</label>
+  <select id="seasonType">
+    <option value="Anime">Anime</option>
+    <option value="TV Show">TV Show</option>
+    <option value="Drama">Drama</option>
+    <option value="Documentary">Documentary</option>
+    <option value="Movie">Movie</option>
+    <option value="Other">Other</option>
+  </select>
+
+  <!-- 📝 → Input: Title of the Season -->
+  <label for="seasonTitle">Title</label>
+  <input type="text" id="seasonTitle" placeholder="e.g. Jujutsu Kaisen Season 2" />
+
+  <!-- 📆 → Input: Date Season was Finished -->
+  <label for="seasonDate">Date Finished</label>
+  <input type="date" id="seasonDate" />
+
+  <!-- ⏱️ → Input: Total Time in Minutes -->
+  <label for="seasonHours">Study Time (in minutes)</label>
+  <input type="number" id="seasonHours" placeholder="e.g. 300" />
+
+  <!-- 🗒️ → Input: Optional Study Notes -->
+  <label for="seasonNotes">Notes (optional)</label>
+  <textarea id="seasonNotes" rows="3" placeholder="e.g. Subbed, heavy dialogue, good vocab practice."></textarea>
+
+  <!-- ✅ → Submit Button -->
+  <button onclick="submitSeasonEntry()">Log Season Entry</button>
+  <div class="status" id="status"></div>
+
+  <!-- 📌 → Note Box for User Clarification -->
+  <div class="note">
+    <strong>🔍 Note:</strong><br>
+    This will log your entry with a default tag of <code>Media: [Type]</code> and will contribute to your <strong>Total Study Hours</strong>, but <em>not</em> your <strong>Average Session Time</strong> or <strong>Study Session Count</strong>.
+  </div>
+
+  <script>
+     /**
+     * 🚀 Submit handler for season log form
+     * Validates required fields, builds an entry object,
+     * and sends it to the backend logger function via Apps Script
+     */
+    function submitSeasonEntry() {
+      // 📥 → Collect input values
+      const type = document.getElementById("seasonType").value;
+      const title = document.getElementById("seasonTitle").value.trim();
+      const date = document.getElementById("seasonDate").value;
+      const minutes = document.getElementById("seasonHours").value.trim();
+      const notes = document.getElementById("seasonNotes").value.trim();
+      const status = document.getElementById("status");
+
+      // ⚠️ → Validate that all required fields are present
+      if (!title || !date || !minutes) {
+        status.innerText = "⚠️ Please fill in Title, Date, and Time.";
+        status.style.color = "orange";
+        return;
+      }
+
+      // 🧱 → Build the log entry object
+      const entry = {
+        resource: title,
+        focus: `Media: ${type}`, // Auto-tag by media type
+        day: "",
+        date: date,
+        time: minutes,
+        completed: false,
+        difficulty: "",
+        notes: notes,
+        type: "Season Entry"
+      };
+
+      // 🛰️ → Send the entry to the backend logger function
+      google.script.run
+        .withSuccessHandler(() => {
+          status.innerText = "✅ Season logged!";
+          status.style.color = "green";
+
+          // 🧹 → Clear form fields after successful log
+          document.getElementById("seasonTitle").value = "";
+          document.getElementById("seasonDate").value = "";
+          document.getElementById("seasonHours").value = "";
+          document.getElementById("seasonNotes").value = "";
+        })
+        .withFailureHandler((err) => {
+          status.innerText = "❌ Error: " + err.message;
+          status.style.color = "red";
+        })
+        .logFullStudyEntry(entry); // 🔗 Apps Script backend handler
+    }
+  </script>
+</body>
+</html>
+

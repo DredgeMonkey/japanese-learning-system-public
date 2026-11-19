@@ -1,0 +1,204 @@
+<!--
+📄 StudySessionLogger.html
+─────────────────────────────────────────────
+📝 Sidebar interface for manually logging study sessions
+in the Japanese Learning Tracker system.
+
+This form allows users to submit detailed study entries
+including resource used, focus, date, duration, and notes.
+
+📥 Data Target: Learning Log (for current phase)
+🔧 Backend Function: logFullStudyEntry(entry) in Code.gs
+⚠️ Timezone Handling: Manual date selection advised due to UTC offset
+
+🧩 Fields:
+- Resource
+- Study Focus
+- Day Number
+- Date (manual due to UTC issues)
+- Time Spent
+- Completion checkbox
+- Difficulty rating
+- Notes
+
+🎯 Purpose:
+- Empower users to log custom study sessions with high granularity
+-->
+
+<!-- StudySessionLogger.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      /* 🎨 → Unified UI styling from SeasonLogger */
+      body {
+        font-family: 'Segoe UI', sans-serif;
+        padding: 20px;
+      }
+
+      label {
+        display: block;
+        margin-top: 10px;
+        font-weight: bold;
+      }
+
+      input[type="text"],
+      input[type="number"],
+      input[type="date"],
+      select,
+      textarea {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        box-sizing: border-box;
+      }
+
+      textarea {
+        resize: vertical;
+      }
+
+      button {
+        margin-top: 15px;
+        background-color: #673ab7;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+      }
+
+      #status {
+        margin-top: 15px;
+        font-size: 0.9em;
+        font-weight: bold;
+        white-space: pre-wrap;
+      }
+
+      #timezoneNotice {
+        margin-top: 20px;
+        font-size: 0.9em;
+        line-height: 1.5;
+        color: #555;
+        white-space: pre-wrap;
+        background: #f9f9f9;
+        padding: 12px;
+        border-radius: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 🧾 Sidebar Header -->
+    <h2>📘 Log Study Session</h2>
+
+    <!-- 📝 Resource Input -->
+    <label for="resource">Resource Used</label>
+    <input type="text" id="resource" placeholder="e.g. Genki, Anime, WaniKani" />
+
+    <!-- 🎯 Study Focus -->
+    <label for="focus">Study Focus</label>
+    <input type="text" id="focus" placeholder="Grammar, Vocab, Listening..." />
+
+    <!-- 🔢 Day Identifier -->
+    <label for="day">Day Number</label>
+    <input type="text" id="day" placeholder="e.g. Day 25" />
+
+    <!-- 📅 Date Selection -->
+    <label for="date">Date</label>
+    <input type="date" id="date" />
+
+    <!-- ⏱️ Time Entry -->
+    <label for="time">Time Spent (minutes)</label>
+    <input type="number" id="time" min="0" />
+
+    <!-- ✅ Completion Checkbox -->
+    <label>
+      <input type="checkbox" id="completed" />
+      Mark as Completed?
+    </label>
+
+    <!-- 📊 Difficulty Selector -->
+    <label for="difficulty">Difficulty Rating</label>
+    <select id="difficulty">
+      <option value="">Select</option>
+      <option value="1">⭐</option>
+      <option value="2">⭐⭐</option>
+      <option value="3">⭐⭐⭐</option>
+      <option value="4">⭐⭐⭐⭐</option>
+      <option value="5">⭐⭐⭐⭐⭐</option>
+    </select>
+
+    <!-- 🗒️ Notes -->
+    <label for="notes">Notes</label>
+    <textarea id="notes" rows="4" placeholder="Reflections, struggles, wins..."></textarea>
+
+    <!-- 📤 Submit Button -->
+    <button onclick="submitForm()">Log Study Session</button>
+
+    <!-- 🔔 Status Display -->
+    <div id="status"></div>
+
+    <!-- ⚠️ UTC Timezone Warning -->
+    <div id="timezoneNotice" style="
+      margin-top: 16px;
+      font-size: 0.9em;
+      line-height: 1.35;
+      color: #333;
+      background: #f9f9f9;
+      padding: 10px 12px;
+      border-radius: 6px;
+      border-left: 4px solid #ffc107;
+    ">
+      <strong>⚠️ Timezone Notice:</strong> Google Apps Script saves dates in UTC.<br><br>
+      If you're in a timezone <strong>behind UTC</strong> (like most US timezones), selecting today’s date may log it as the <em>previous day</em>.<br><br>
+      <strong>➡️ To ensure accuracy:</strong><br>
+      – Pick the date <strong>one day ahead</strong> (e.g., choose April 30 to log April 29).<br>
+      – Then run <strong>🩺 Heal Session Anchors</strong> from the menu.<br><br>
+      ✅ Your dashboard will reflect the correct date automatically.
+    </div>
+
+
+    <script>
+       /**
+       * 🚀 Submit study session form to Apps Script backend
+       */
+      function submitForm() {
+        const entry = {
+          resource: document.getElementById("resource").value.trim(),
+          focus: document.getElementById("focus").value.trim(),
+          day: document.getElementById("day").value.trim(),
+          date: document.getElementById("date").value,
+          time: document.getElementById("time").value.trim(),
+          completed: document.getElementById("completed").checked,
+          difficulty: document.getElementById("difficulty").value,
+          notes: document.getElementById("notes").value.trim()
+        };
+
+        // 📡 Call logFullStudyEntry() and handle results
+        google.script.run
+          .withSuccessHandler(() => {
+            const status = document.getElementById("status");
+            status.innerText = "✅ Study session logged successfully!";
+            status.style.color = "green";
+
+            // 🧼 Clear form inputs
+            document.getElementById("resource").value = "";
+            document.getElementById("focus").value = "";
+            document.getElementById("day").value = "";
+            document.getElementById("date").value = "";
+            document.getElementById("time").value = "";
+            document.getElementById("completed").checked = false;
+            document.getElementById("difficulty").value = "";
+            document.getElementById("notes").value = "";
+          })
+          .withFailureHandler((err) => {
+            const status = document.getElementById("status");
+            status.innerText = "❌ Error logging session: " + err.message;
+            status.style.color = "red";
+          })
+          .logFullStudyEntry(entry);
+      }
+    </script>
+  </body>
+</html>
+

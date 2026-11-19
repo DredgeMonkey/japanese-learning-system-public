@@ -1,0 +1,353 @@
+<!-- 
+  📘 SystemGuideSidebar.html
+  ─────────────────────────────────────────────
+  This file provides the full system overview guide for the Japanese Study Tracker.
+
+  It is loaded into a sidebar from the Tooltips & Help menu and features collapsible 
+  sections using HTML <details> for each major component of the system.
+
+  🧩 Components Explained:
+  - Dashboard
+  - Learning Log
+  - Master Lesson Plan
+  - SmartPrompt Engine
+  - Resource Guide
+  - System Flow, Metrics, Cleanup Tools
+
+  🛠️ Style Guide:
+  - Clean, legible font (Segoe UI)
+  - <details>/<summary> for collapsible logic
+  - <ul> and <table> for clear data structure
+  - Optional <div class="note"> for callouts
+  - No JavaScript required — static sidebar content only
+
+  ✅ Use this file to understand how each tool, metric, and workflow fits into the system
+-->
+
+
+<!-- SystemGuideSidebar.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      padding: 16px;
+      line-height: 1.6;
+      background-color: #ffffff;
+      color: #333;
+    }
+
+    h1 {
+      font-size: 20px;
+      margin-bottom: 14px;
+      color: #2c3e50;
+    }
+
+    details {
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 8px 10px;
+      background: #f9f9f9;
+    }
+
+    summary {
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 14px;
+      color: #1a73e8;
+    }
+
+    ul {
+      margin: 8px 0 8px 14px; /* reduced left indent */
+      font-size: 13px;
+      padding-left: 0; /* removes default padding */
+      list-style-position: inside;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 6px 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f0f0f0;
+    }
+
+    .note {
+      background: #eef6ff;
+      border-left: 4px solid #1a73e8;
+      padding: 8px 12px;
+      margin: 8px 0;
+      font-size: 13px;
+    }
+  </style>
+
+</head>
+<body>
+  <!-- 🧭 Top Header -->
+  <h1>📘 Japanese Study Tracker: System Overview</h1>
+
+  <!-- 🔧 Main Components Section -->
+  <details open>
+    <summary>🔧 Core Components</summary>
+
+    <!-- 🧮 Dashboard Logic -->
+    <details open>
+      <summary>1. Dashboard</summary>
+      <ul>
+        <li><strong>Current Phase (B3)</strong> → Sets the active phase</li>
+        <li><strong>Phase Start Date (B4)</strong> → Drives date assignment logic</li>
+        <div class="note">Days are <strong>linearly counted</strong>, not skipped. So Day 10 is always Day 10, even if you miss a day.</div>
+        <li>Lessons are user-editable — content per day is flexible</li>
+        <li><strong>B25</strong> → Email for reports</li>
+        <li><strong>B27</strong> → Sheet ID (controls which Learning Log is used)</li>
+        <li><strong>B28</strong> → Calendar ID (for optional event syncing)</li>
+        <li><strong>🧠 Update Dashboard</strong> → Refreshes metrics and auto-creates new log sheets if needed</li>
+      </ul>
+    </details>
+
+    <!-- 📘 Learning Log Explanation -->
+    <details>
+      <summary>2. Learning Log</summary>
+      <ul>
+        <li>Permanent study history — one sheet per phase</li>
+        <li>Auto-generated only when:
+          <ul>
+            <li><strong>Dashboard B3</strong> (Phase) is changed</li>
+            <li><strong>B4</strong> (Start Date) is set</li>
+            <li>Then you run <strong>🧠 Update Dashboard</strong></li>
+          </ul>
+        </li>
+        <li>The system creates a new log (e.g., <code>Learning Log 2</code>, <code>Learning Log 3</code>, etc.)</li>
+        <li>Previous logs are preserved — each appears in your bottom sheet tabs</li>
+        <li>Populated via 📝 Quick Entry and 📘 Study Session</li>
+        <li>Feeds all dashboard metrics: streaks, hours, vocab, tags, difficulty</li>
+      </ul>
+    </details>
+
+    <!-- 🗂️ Master Lesson Plan Details -->
+    <details>
+      <summary>3. Master Lesson Plan</summary>
+      <ul>
+        <li>Organized by phase with columns: <strong>Day (A)</strong>, <strong>Phase (B)</strong>, <strong>Date (C)</strong>, <em>then your lesson content</em></li>
+        <li>Driven by Dashboard: <strong>B3 (Phase)</strong> + <strong>B4 (Start Date)</strong></li>
+        <li>Run <em>Assign Dates to Active Phase</em> to fill in 90 sequential calendar days for the selected phase</li>
+        <li>Only columns A–C are overwritten — lesson content stays untouched</li>
+        <li>This mapping is required for syncing (tasks/calendar), but not required for logging</li>
+        <div class="note">Day numbers are always sequential (1–90+), even if you miss a day — the calendar just keeps going</div>
+      </ul>
+    </details>
+
+    <!-- 🎲 SmartPrompt Tool -->
+    <details>
+      <summary>4. SmartPrompt Engine</summary>
+      <ul>
+        <li>🎲 Click Get SmartPrompt → random suggestion based on mood</li>
+        <li>Does not affect logs, metrics, or syncing — purely for inspiration</li>
+      </ul>
+    </details>
+
+    <!-- 📚 Resource Guide Area -->
+    <details>
+      <summary>5. Resource Guide</summary>
+      <ul>
+        <li>Tracks textbooks, videos, decks, etc.</li>
+        <li>Completely optional and standalone — doesn’t affect metrics</li>
+        <li>Helps you pair resources to study phases</li>
+      </ul>
+    </details>
+  </details>
+
+  <!-- 🔁 System Workflow Section -->
+  <details>
+    <summary>🔁 How the System Flows</summary>
+
+    <!-- 📝 Quick vs Full Logging -->
+    <details open>
+      <summary>📝 Daily Logging</summary>
+      <ul>
+        <li>📝 Quick Entry → fast log for vocab/kanji as well grammar and immersion</li>
+        <li>📘 Study Session → detailed time, tags, difficulty</li>
+        <li>Data goes to active phase sheet</li>
+        <li>Metrics update automatically</li>
+      </ul>
+    </details>
+
+    <!-- 🎬 Season Logger Explanation -->
+    <details>
+      <summary>🎬 Season Logger</summary>
+      <ul>
+        <!-- ➤ Long-form logging for binge content -->
+        The <strong>Season Logger</strong> allows you to log entire anime seasons, TV shows, dramas, or other media content as single entries.
+        These entries:
+        <ul>
+          <li>Contribute to total study hours</li>
+          <li><strong>Do not</strong> count toward session count or average session time</li>
+          <li>Are tagged as <code>Season Entry</code> in the <em>Learning Log</em></li>
+          <li>Default to "Media: Anime" as the tag, with optional type selection</li>
+        </ul>
+        <br>
+        <!-- 🎞️ Movie Logging Guidance -->
+        <strong>🎞️ What About Movies?</strong><br>
+        Movies are short enough (~2 hours) that they can be logged using either the <em>Quick Logger</em> or <em>Study Session Logger</em>:
+        <ul>
+          <li>They count toward both total time <strong>and</strong> average session time</li>
+          <li>Recommended if you're studying with intent (e.g., subtitles, dictionary, note-taking)</li>
+        </ul>
+        If you prefer to keep <em>all media</em> excluded from your averages, you may also log movies using the <strong>Season Logger</strong> — your system, your rules.
+      </ul>
+    </details>
+
+    <!-- 📅 Phase Setup Explanation -->
+    <details>
+      <summary>📅 Phase-Based Study Flow (Optional)</summary>
+      <ul>
+        <li>Set B3 (Phase) and B4 (Start Date) in Dashboard</li>
+        <li>Run <strong>Assign Dates to Active Phase</strong> to initialize your lesson calendar</li>
+        <li>Optionally extend the phase using the <strong>Extend Phase by +30 Days</strong> tool</li>
+        <li>Then you may choose to run:
+          <ul>
+            <li>Create Task Lists</li>
+            <li>Sync Tasks by chunk (Days 1–30, etc)</li>
+            <li>Sync Calendar Events</li>
+          </ul>
+        </li>
+        <div class="note">Syncing is optional and subject to Google API rate limits — the Learning Log is the true source of record.</div>
+      </ul>
+    </details>
+
+    <!-- ➕ Extend Phase Option -->
+    <details>
+      <summary>📈 Extending a Phase</summary>
+      <ul>
+        <li>Click <strong>Extend Phase by +30 Days</strong> to append 30 new rows to the selected phase</li>
+        <li>The system locates the last dated row for the active phase and continues from there</li>
+        <li>Only columns A (Day), B (Phase), and C (Date) are filled in — you can add lessons manually anytime</li>
+        <li>Supports a total of up to 180 days per phase for syncing</li>
+        <div class="note">Useful if your current phase isn’t finished yet but you want to continue logging or syncing seamlessly</div>
+      </ul>
+    </details>
+
+    <!-- 🆕 New Phase Log Sheet Logic -->
+    <details>
+      <summary>📄 Auto-Creation of New Phase Logs</summary>
+      <ul>
+        <li>When you change B3 (Phase) and run 🧠 Update Dashboard:</li>
+        <li>System checks for a corresponding Learning Log X</li>
+        <li>If not found:
+          <ul>
+            <li>Copies the original Learning Log sheet</li>
+            <li>Clears data rows but keeps formatting</li>
+            <li>Renames to "Learning Log 2", "3", etc.</li>
+          </ul>
+        </li>
+        <li>Metrics still stay continuous across phases</li>
+        <li>Keeps the spreadsheet clean and modular</li>
+      </ul>
+    </details>
+
+    <!-- 🧹 Cleanup Routines -->
+    <details>
+      <summary>🧹 Clean-Up & Re-Sync Tools</summary>
+      <ul>
+        <li><strong>Wipe All Task Lists</strong> → Deletes all synced Google Task **lists** at the root level (which inherently deletes all associated tasks)</li>
+        <li><strong>Clean Calendar Events</strong> → Deletes all synced study events from your linked Google Calendar</li>
+        <li><strong>After wiping task lists:</strong>
+          <ul>
+            <li>You MUST re-run <em>Create Task Lists</em></li>
+            <li>Then re-run <em>Sync Tasks</em> and/or <em>Sync Calendar Events</em></li>
+          </ul>
+        </li>
+        <li><strong>Why this works best:</strong>
+          <ul>
+            <li>Google’s API imposes heavy caching & duplication restrictions</li>
+            <li>Trying to overwrite tasks/events in-place causes instability, duplicates, or partial syncs</li>
+            <li>Google also rate-limits “bulk delete + recreate” chains — delaying you more than this clean-slate flow</li>
+          </ul>
+        </li>
+        <li>If deletion is incomplete due to API rate limits: <strong>simply re-run the clean-up tool</strong> — it’s safe</li>
+        <li><strong>✅ Your Learning Log and curriculum are untouched</strong> — syncing is just an optional integration layer</li>
+        <div class="note">🧠 After wiping, the system cannot remember your previous task completion — re-check any completed tasks manually in Google Tasks</div>
+      </ul>
+    </details>
+  </details>
+
+  <!-- ⚠️ Usage Notes -->
+  <details>
+    <summary>⚠️ Important Notes</summary>
+    <ul>
+      <li><strong>Task & Calendar Syncing is Optional</strong> — not required for core tracking</li>
+      <li><strong>You must assign dates and create task lists</strong> before syncing tasks/events</li>
+      <li><strong>You can extend phases</strong> in 30-day increments or by direct prompt entry — up to 180 days supported</li>
+      <li><strong>Google Sheets stores timestamps in UTC</strong> — if you're selecting dates manually, use 🩺 Heal Session Anchors to clean up formatting or fix timezone mismatches caused by forward picking</li>
+    </ul>
+  </details>
+
+  <!-- 📊 Dashboard Metric Descriptions -->
+  <details>
+    <summary>📊 Dashboard Metrics Explained</summary>
+    <table>
+      <tr><th>Metric</th><th>Description</th></tr>
+      <tr><td>Study Streak</td><td>Current + longest streak (🔥 🌊 🌸 thresholds)</td></tr>
+      <tr><td>Days Studied</td><td>Total + this week</td></tr>
+      <tr><td>Kanji/Vocab</td><td>From Quick Entry</td></tr>
+      <tr><td>Study Sessions</td><td>Full logs with time + content</td></tr>
+      <tr><td>Total Study Hours</td><td>Sum of durations</td></tr>
+      <tr><td>Avg Time</td><td>Average duration per session</td></tr>
+      <tr><td>Completion Rate</td><td>ogged days matched to Master Plan</td></tr>
+      <tr><td>Top Tags</td><td>Most-used tags</td></tr>
+      <tr><td>Most Studied Resource</td><td>Tag/resource frequency</td></tr>
+      <tr><td>Difficulty Avg</td><td>1–5 rating across logs</td></tr>
+      <tr><td>Sparkline</td><td>14-day habit graph (█ = studied)</td></tr>
+    </table>
+  </details>
+
+  <!-- 🧰 Utility Add-ons -->
+  <details>
+    <summary>🧰 Supplemental Tools</summary>
+    <ul>
+      <li>🧽 Cleanup Tools → Wipe tasks/calendar before re-syncing</li>
+      <li>🔁 Refresh Type Tags → Reapplies the formula in Column K to visually mirror your "Type" selections in Column B. Useful if tags go missing after manual entry or copy-paste.</li>
+      <li>🔐 Real OAuth → Triggers Google's internal reauthorization handshake if you get access or sidebar errors. Run it, log out of your Google account, then log back in and reload the sheet.</li>
+      <li>🧼 Format Dashboard Layout → Restores the Dashboard’s theme-based structure, header zones, colors, borders, and layout if things get visually broken.</li>
+      <li>🎨 Theme Styling → Toggle Light/Dark + format fix</li>
+      <li>📧 Email Reports → Daily & Weekly to B25 address</li>
+      <li>🧪 Developer Tools:
+        <ul>
+          <li>Test Sheet ID (B27)</li>
+          <li>Test Calendar ID (B28)</li>
+        </ul>
+      </li>
+      <li>🎲 SmartPrompt → Dice-roll study inspiration</li>
+    </ul>
+  </details>
+
+  <!-- 🧭 Closing Guidance -->
+  <details>
+    <summary>🧭 Final Guidance</summary>
+    <ul>
+      <li><strong>Minimalist User:</strong> Just log & track — no syncing needed</li>
+      <li><strong>Structured User:</strong> Assign dates + sync tasks, and visualize your progress calendar-style</li>
+      <li><strong>Modular by Phase:</strong> Each new phase has its own log sheet — clean, efficient, expandable</li>
+      <li><strong>Self-healing:</strong> Date weirdness? Session not syncing? Tools like 🩺 Heal Session Anchors and 🧪 Test Connections will always help realign</li>
+      <li><strong>Flexible:</strong> Works for casual learners or JLPT prep warriors</li>
+    </ul>
+  </details>
+</body>
+</html>
+
